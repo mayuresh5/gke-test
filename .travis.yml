@@ -1,0 +1,23 @@
+language: generic
+sudo: required
+services:
+- docker
+env:
+  global:
+  - GIT_SHA=$(git rev-parse HEAD)
+  - CLOUDSDK_CORE_DISABLE_PROMPTS=1
+before_install:
+- openssl aes-256-cbc -K $encrypted_a19bc86f4618_key -iv $encrypted_a19bc86f4618_iv
+  -in gcp-poc-project-285306-fc014e932a61.json.enc -out gcp-poc-project-285306-fc014e932a61.json
+  -d
+- curl https://sdk.cloud.google.com | bash > /dev/null;
+- source $HOME/google-cloud-sdk/path.bash.inc
+- gcloud components update kubectl
+- gcloud auth activate-service-account --key-file gcp-poc-project-285306-fc014e932a61.json
+- gcloud container clusters get-credentials test --zone=asia-south1-a --project=gcp-poc-project-285306
+- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+deploy:
+  provider: script
+  script: bash deploy.sh
+  on:
+    branch: main
