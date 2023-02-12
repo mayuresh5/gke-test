@@ -47,3 +47,5 @@ Link: https://github.com/mayuresh5/minikube-static-app
 9. chmod 700 deploy.sh
 10. sh deploy.sh
 
+**FOR GKE automation through TRAVIS-CI**
+link: https://github.com/mayuresh5/gke-test.git
